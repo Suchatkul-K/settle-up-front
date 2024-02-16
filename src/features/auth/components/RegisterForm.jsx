@@ -1,34 +1,50 @@
 import React, { useState } from "react";
 import { register } from "../../../api/auth";
 import validateRegister from "../validations/validate-register";
+import { toast } from "react-toastify";
 
-const userObj = {
-    username: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-}
+const initUserObj = {
+  username: "",
+  email: "",
+  password: "",
+  confirmPassword: "",
+};
 
 function RegisterForm() {
-  const [input, setInput] = useState(userObj);
-  const [error, setError] = useState()
+  const [input, setInput] = useState(initUserObj);
+  const [error, setError] = useState();
 
   const handleChange = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
-    // console.log(input);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const errObj = validateRegister(input)
-    setError(errObj)
-    // register(input)
+  const handleSubmit = async (e) => {
+    try {
+      e.preventDefault();
+      const errObj = validateRegister(input);
+      if (errObj) {
+        return setError(errObj);
+      }
+      const result = await register(input);
+      console.log(result);
+
+      if (result) {
+        setInput(initUserObj);
+        localStorage.setItem("accessToken", result.data.accessToken);
+        // navigate
+
+        toast.success("user register successfully")
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response?.data.message)
+    }
   };
 
-  const handleCancel = (e) => {
-    setInput(userObj)
-    document.getElementById("my_modal_3").close()
-  }
+  const handleCancel = () => {
+    setInput(initUserObj);
+    document.getElementById("my_modal_3").close();
+  };
 
   return (
     <dialog id="my_modal_3" className="modal">
@@ -52,7 +68,9 @@ function RegisterForm() {
                 className="input input-bordered"
                 onChange={handleChange}
               />
-              {error?.username && <span className="flex text-error">{error.username}</span>}
+              {error?.username && (
+                <span className="flex text-error">{error.username}</span>
+              )}
             </div>
 
             <div className="form-control">
@@ -66,7 +84,9 @@ function RegisterForm() {
                 className="input input-bordered"
                 onChange={handleChange}
               />
-              {error?.email && <span className="flex text-error">{error.email}</span>}
+              {error?.email && (
+                <span className="flex text-error">{error.email}</span>
+              )}
             </div>
 
             <div className="form-control">
@@ -81,7 +101,9 @@ function RegisterForm() {
                 className="input input-bordered"
                 onChange={handleChange}
               />
-              {error?.password && <span className="flex text-error">{error.password}</span>}
+              {error?.password && (
+                <span className="flex text-error">{error.password}</span>
+              )}
             </div>
 
             <div className="form-control">
@@ -96,7 +118,9 @@ function RegisterForm() {
                 className="input input-bordered"
                 onChange={handleChange}
               />
-              {error?.confirmPassword && <span className="flex text-error">{error.confirmPassword}</span>}
+              {error?.confirmPassword && (
+                <span className="flex text-error">{error.confirmPassword}</span>
+              )}
             </div>
 
             <div className="form-control mt-6 gap-4">
@@ -104,13 +128,15 @@ function RegisterForm() {
                 Register
               </button>
               <hr />
-              <span className="btn btn-secondary text-xl font-semibold" onClick={handleCancel}>
+              <span
+                className="btn btn-secondary text-xl font-semibold"
+                onClick={handleCancel}
+              >
                 Cancel
               </span>
             </div>
           </form>
         </div>
-
       </div>
     </dialog>
   );

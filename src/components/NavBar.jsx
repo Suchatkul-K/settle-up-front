@@ -4,7 +4,7 @@ import Avatar from "./Avatar";
 
 function NavBar() {
   return (
-    <div className="navbar bg-base-100 fixed">
+    <div className="navbar static border-b bg-gradient-to-t from-base-200 to-white">
       {/* side bar */}
       <div className="flex-none">
         <button className="btn btn-square btn-ghost">

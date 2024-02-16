@@ -1,20 +1,44 @@
 import React, { useState } from "react";
-import RegisterForm from "./RegisterForm";
+import { login } from "../../../api/auth";
+import { toast } from "react-toastify";
+import { storeToken } from "../../../utils/local-storage";
+import validateLogin from "../validations/validate-login";
+
+const initial = {
+  email: "",
+  password: "",
+};
 
 function LoginForm() {
-  const [input, setInput] = useState({
-    email: "",
-    password: "",
-  });
+  const [input, setInput] = useState(initial);
+  const [error, setError] = useState();
 
   const handleChange = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(e);
-    console.log('submit')
+  const handleSubmit = async (e) => {
+    try {
+      e.preventDefault();
+      const errObj = validateLogin(input);
+      if (errObj) {
+        return setError(errObj);
+      }
+      const result = await login(input);
+      console.log(result);
+      setInput(initial);
+
+      if (result) {
+        storeToken(result.data.accessToken)
+        toast.success("Log in successfully");
+
+        //navigate
+      }
+
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response?.data.message)
+    }
   };
 
   return (
@@ -31,8 +55,10 @@ function LoginForm() {
             placeholder="email"
             className="input input-bordered"
             onChange={handleChange}
-            required
           />
+          {error?.email && (
+                <span className="flex text-error">{error.email}</span>
+            )}
         </div>
 
         <div className="form-control">
@@ -46,22 +72,24 @@ function LoginForm() {
             placeholder="password"
             className="input input-bordered"
             onChange={handleChange}
-            required
           />
+          {error?.password && (
+                <span className="flex text-error">{error.password}</span>
+            )}
         </div>
 
         <div className="form-control mt-6 gap-4">
           <button className="btn btn-secondary text-xl font-semibold">
             Login
           </button>
-            <hr />
+          <hr />
           <div
-          className="btn btn-secondary text-xl font-semibold "
-          onClick={() => document.getElementById("my_modal_3").showModal()}
-          type="button"
-        >
-          Create new account
-        </div>
+            className="btn btn-secondary text-xl font-semibold "
+            onClick={() => document.getElementById("my_modal_3").showModal()}
+            type="button"
+          >
+            Create new account
+          </div>
         </div>
       </form>
     </div>
