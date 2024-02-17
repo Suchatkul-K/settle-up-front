@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { login } from "../../../api/auth";
 import { toast } from "react-toastify";
 import { storeToken } from "../../../utils/local-storage";
 import validateLogin from "../validations/validate-login";
+import useAuth from "../../../hooks/use-auth";
 
 const initial = {
   email: "",
@@ -12,6 +12,8 @@ const initial = {
 function LoginForm() {
   const [input, setInput] = useState(initial);
   const [error, setError] = useState();
+
+  const { login } = useAuth()
 
   const handleChange = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
@@ -24,17 +26,9 @@ function LoginForm() {
       if (errObj) {
         return setError(errObj);
       }
-      const result = await login(input);
-      console.log(result);
-      setInput(initial);
-
-      if (result) {
-        storeToken(result.data.accessToken)
-        toast.success("Log in successfully");
-
-        //navigate
-      }
-
+      await login(input);
+      // setInput(initial);
+      toast.success("Log in successfully");
     } catch (error) {
       console.log(error);
       toast.error(error.response?.data.message)

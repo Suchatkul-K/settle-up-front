@@ -3,7 +3,7 @@ import useMain from "../../../hooks/use-main";
 
 function CircleHeader() {
   const { circleData } = useMain()
-  console.log(circleData)
+  // console.log(circleData)
   return (
     <div className="w-full">
       <div className="text-center font-bold text-2xl">{circleData.circleName}</div>

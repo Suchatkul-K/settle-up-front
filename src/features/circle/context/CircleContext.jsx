@@ -6,7 +6,7 @@ export const CircleContext = createContext()
 
 export default function CircleContextProvider({ children }) {
     
-    const [circles, setCircles] = useState([]);
+    const [circles, setCircles] = useState(null);
 
     useEffect(() => {
         try {

@@ -8,6 +8,7 @@ export const MainContext = createContext()
 export default function MainContextProvider({children}) {
     const [circleData,setCircleData] = useState({id: 0, circleName: '', bills: [], members: []})
     const param = useParams()
+
     useEffect(()=>{
         getCircleByCircleId(param.circleId)
             .then(res => {
@@ -18,6 +19,7 @@ export default function MainContextProvider({children}) {
             })
             .catch(err => console.log(err))
     },[])
+    
   return (
     <MainContext.Provider value={{ circleData }}>
         {children}

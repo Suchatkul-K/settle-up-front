@@ -3,9 +3,13 @@ import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import './index.css'
 import 'react-toastify/dist/ReactToastify.css';
+import AuthContextProvider from './features/auth/context/AuthContext.jsx';
+import CircleContextProvider from './features/circle/context/CircleContext.jsx';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  // <React.StrictMode>
+    <AuthContextProvider>
+      <App />
+    </AuthContextProvider>
+  // </React.StrictMode>
 )

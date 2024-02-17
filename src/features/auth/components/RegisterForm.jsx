@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { register } from "../../../api/auth";
 import validateRegister from "../validations/validate-register";
 import { toast } from "react-toastify";
+import useAuth from "../../../hooks/use-auth";
 
 const initUserObj = {
   username: "",
@@ -14,6 +14,8 @@ function RegisterForm() {
   const [input, setInput] = useState(initUserObj);
   const [error, setError] = useState();
 
+  const { register } = useAuth()
+
   const handleChange = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
   };
@@ -25,16 +27,11 @@ function RegisterForm() {
       if (errObj) {
         return setError(errObj);
       }
-      const result = await register(input);
-      console.log(result);
 
-      if (result) {
-        setInput(initUserObj);
-        localStorage.setItem("accessToken", result.data.accessToken);
-        // navigate
-
-        toast.success("user register successfully")
-      }
+      await register(input);
+      // setInput(initUserObj);
+      toast.success("user register successfully")
+      
     } catch (error) {
       console.log(error);
       toast.error(error.response?.data.message)
