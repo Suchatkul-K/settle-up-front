@@ -4,6 +4,7 @@ import Avatar from "./Avatar";
 import useAuth from "../hooks/use-auth";
 import EditUserForm from "../features/auth/components/EditUserForm";
 import useCircle from "../hooks/use-circle";
+import { useNavigate } from "react-router-dom";
 
 function NavBar() {
   const { authUser, logout } = useAuth();
@@ -12,6 +13,8 @@ function NavBar() {
     circles = useCircle().circles
     // console.log(circles)
   }
+
+  const navigate = useNavigate()
   
 
   return (
@@ -41,7 +44,7 @@ function NavBar() {
           </div>
 
           {/* Side Bar content */}
-          <div className="drawer-side top-[65px]">
+          <div className="drawer-side top-[65px] z-20">
             <label
               htmlFor="my-drawer"
               aria-label="close sidebar"
@@ -54,7 +57,7 @@ function NavBar() {
                   <summary>My circle</summary>
                   <ul>
                     {circles.map(circle => (<li key={circle.id}>
-                      <a>
+                      <a onClick={() => navigate(`/circle/${circle.id}`)}>
                         {circle.circleName}
                       </a>
                     </li>))}
@@ -94,7 +97,7 @@ function NavBar() {
 
       {/* app name and logo */}
       <div className="flex-1">
-        <div className="btn btn-ghost py-2">
+        <div className="btn btn-ghost py-2" onClick={() => navigate('/home')}>
           <AppLogo />
           <a className="text-xl text-center">Settle up</a>
         </div>

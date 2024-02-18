@@ -6,11 +6,12 @@ import { storeToken } from '../../../utils/local-storage'
 export const MainContext = createContext()
 
 export default function MainContextProvider({children}) {
-    const [circleData,setCircleData] = useState({id: 0, circleName: '', bills: [], members: []})
-    const param = useParams()
+    const [circleData,setCircleData] = useState(null)
+    const { circleId } = useParams()
+    console.log( circleId ) 
 
     useEffect(()=>{
-        getCircleByCircleId(param.circleId)
+        getCircleByCircleId(circleId)
             .then(res => {
                 // console.log(res)
                 storeToken(res.data.accessToken)
@@ -18,7 +19,7 @@ export default function MainContextProvider({children}) {
                 // console.log(circleData)
             })
             .catch(err => console.log(err))
-    },[])
+    },[circleId])
     
   return (
     <MainContext.Provider value={{ circleData }}>

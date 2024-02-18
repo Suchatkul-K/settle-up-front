@@ -18,7 +18,8 @@ export default function AuthContextProvider({children}) {
         })
         .catch((err) => {
           toast.error(err.response?.data.message);
-        }).finally(()=> {console.log(authUser)})
+        })
+        // .finally(()=> {console.log(authUser)})
     }
   }, []);
 

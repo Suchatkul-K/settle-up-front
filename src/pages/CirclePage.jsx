@@ -31,9 +31,8 @@ function CirclePage() {
       toast.error(err.response?.data.message);
     }
   };
+  // <CircleContextProvider>
   return (
-    <CircleContextProvider>
-      {/* <div className="hero min-h-[calc(100vh-64px)]"> */}
         <div className="hero min-h-screen">
           <div className="hero-content flex-col lg:flex-row">
             <div className="card shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
@@ -41,6 +40,8 @@ function CirclePage() {
                 <div className="text-2xl font-semibold">My circles</div>
                 <div>which circle are you looking for?</div>
                 <CircleList />
+
+                {/* create new circle */}
                 <Button
                   className={"flex items-center"}
                   onClick={() =>
@@ -79,9 +80,8 @@ function CirclePage() {
             </div>
           </div>
         </div>
-      {/* </div> */}
-    </CircleContextProvider>
   );
 }
+    {/* </CircleContextProvider> */}
 
 export default CirclePage;
