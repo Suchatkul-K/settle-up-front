@@ -7,13 +7,14 @@ export const AuthContext = createContext()
 
 export default function AuthContextProvider({children}) {
   const [authUser, setAuthUser] = useState(null);
+  const accessToken = getToken()
 
   useEffect(() => {
-    if (getToken()) {
+    if (accessToken) {
       authApi
         .fetchMe()
         .then((res) => {
-          console.log(res.data.user)
+          // console.log(res.data.user)
           setAuthUser(res.data.user);
         })
         .catch((err) => {
@@ -21,7 +22,7 @@ export default function AuthContextProvider({children}) {
         })
         // .finally(()=> {console.log(authUser)})
     }
-  }, []);
+  }, [accessToken]);
 
   const register = async (user) => {
     const res = await authApi.register(user);

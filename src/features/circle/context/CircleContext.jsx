@@ -9,15 +9,15 @@ export default function CircleContextProvider({ children }) {
     const [circles, setCircles] = useState(null);
 
     useEffect(() => {
-        try {
+        // try {
           getUserCircle()
             .then((res) => setCircles(res.data.circles))
             .catch((err) => {
               toast.error(err.response?.data.message);
             });
-        } catch (err) {
-          toast.error(err.response?.data.message);
-        }
+        // } catch (err) {
+        //   toast.error(err.response?.data.message);
+        // }
       }, []);
 
   return (

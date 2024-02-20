@@ -4,12 +4,14 @@ const widthClass = {
   nav: "w-24",
   bill: "w-24",
   mini: "w-12",
+  member: "w-12",
+  full: "w-full"
 };
 
 function Avatar({ width, src, name }) {
-  const finalWidth = width ? widthClass[width] : widthClass.bill;
+  const finalWidth = width ? widthClass[width] : widthClass.full;
   return (
-    <div className="avatar placeholder w-full">
+    <div className={`avatar placeholder ${finalWidth}`}>
       <div className="bg-neutral text-neutral-content rounded-full w-full">
         <span className="text-2xl">{name || "D"}</span>
       </div>

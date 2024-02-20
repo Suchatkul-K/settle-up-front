@@ -8,11 +8,15 @@ import { useNavigate } from "react-router-dom";
 
 function NavBar() {
   const { authUser, logout } = useAuth();
-  let circles;
-  if(authUser) {
-    circles = useCircle().circles
-    // console.log(circles)
-  }
+  const { circles, setCircles } = useCircle()
+  // let circles;
+  // if(authUser) {
+  //   circles = useCircle().circles
+  //   // console.log(circles)
+  // }
+
+  // console.log(authUser)
+  // console.log(circles)
 
   const navigate = useNavigate()
   
@@ -136,7 +140,7 @@ function NavBar() {
                 </button> */}
                 <button
                   className="btn btn-ghost font-medium justify-start hover:bg-base-200"
-                  onClick={logout}
+                  onClick={() => {setCircles(null);logout();navigate('/')}}
                 >
                   Log out
                 </button>

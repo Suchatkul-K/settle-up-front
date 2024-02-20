@@ -6,8 +6,16 @@ import useMain from '../../../hooks/use-main'
 
 export default function ProtectedRoute({ children }) {
     const { authUser } = useAuth()
-    const { circleData } = useMain()
+    const { circleId } = useMain()
 
-    // return circleData ? <Navigate to={`/circle/${circleData.circleId}/members`} /> :
-    return authUser ? <CircleContextProvider>{children}</CircleContextProvider> : <Navigate to="/" />
+    // console.log(authUser)
+    // console.log(circleId)
+
+//     return circleId ? <CircleContextProvider>{children}</CircleContextProvider> :
+//    authUser ? <CircleContextProvider>{children}</CircleContextProvider> : <Navigate to="/" />
+    return circleId ? children :
+    authUser ? children : <Navigate to="/" />
+
+    // return authUser? children : <Navigate to="/" />
 }
+{/* <Navigate to={`/circle/${circleData.id}/`} /> */}
