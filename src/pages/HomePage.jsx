@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import useMain from "../hooks/use-main.js";
 import { getCircleByCircleId } from "../api/main.js";
 import { storeToken } from "../utils/local-storage.js";
+import BillContextProvider from "../features/bill/context/BillContext.jsx";
 
 export default function HomePage() {
   // const {circleData,setCircleData } = useMain()
@@ -28,6 +29,7 @@ export default function HomePage() {
 // },[circleId])
   return (
     // <MainContextProvider>
+    <BillContextProvider>
       <div className="hero min-h-screen ">
         <div className="hero-content w-full h-full bg-base-100">
           <div className="max-w-5xl w-full gap-4 p-4 flex flex-col justify-start h-full">
@@ -37,6 +39,7 @@ export default function HomePage() {
           </div>
         </div>
       </div>
+    </BillContextProvider>
     // </MainContextProvider>
   );
 }

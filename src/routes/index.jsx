@@ -12,6 +12,7 @@ import ProtectCircle from "../features/circle/components/ProtectCircle.jsx";
 import RedirectCircle from "../features/circle/components/RedirectCircle.jsx";
 import MainContextProvider from "../features/main/context/MainContext.jsx";
 import AuthContextProvider from "../features/auth/context/AuthContext.jsx";
+import SummaryList from "../features/summary/components/SummaryList.jsx";
 
 const router = createBrowserRouter([
   {
@@ -67,6 +68,10 @@ const router = createBrowserRouter([
             path: "members",
             element: <MemberList />,
           },
+          {
+            path: "summary",
+            element: <SummaryList />
+          }
         ],
       },
     ],

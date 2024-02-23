@@ -1,18 +1,19 @@
 import React from "react";
 
 const widthClass = {
-  nav: "w-24",
-  bill: "w-24",
-  mini: "w-12",
-  member: "w-12",
-  full: "w-full"
+  nav: "size-24",
+  bill: "size-24",
+  mini: "size-12",
+  member: "size-12",
+  full: "size-full",
+  summary: "size-16"
 };
 
 function Avatar({ width, src, name }) {
   const finalWidth = width ? widthClass[width] : widthClass.full;
   return (
-    <div className={`avatar placeholder ${finalWidth}`}>
-      <div className="bg-neutral text-neutral-content rounded-full w-full">
+    <div className={`avatar placeholder ${finalWidth} `}>
+      <div className="bg-[#453e2c] text-white rounded-full w-full">
         <span className="text-2xl">{name || "D"}</span>
       </div>
     </div>

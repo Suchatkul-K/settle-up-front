@@ -13,7 +13,7 @@ function LoginForm() {
   const [input, setInput] = useState(initial);
   const [error, setError] = useState();
 
-  const { login } = useAuth()
+  const { login, loading, setLoading } = useAuth()
 
   const handleChange = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
@@ -28,6 +28,8 @@ function LoginForm() {
       }
       await login(input);
       // setInput(initial);
+      setLoading(!loading)
+
       toast.success("Log in successfully");
     } catch (error) {
       console.log(error);

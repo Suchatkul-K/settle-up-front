@@ -4,10 +4,12 @@ import Modal from '../../../components/Modal'
 import validateAddBot from "../validations/validate-add-bot.js"
 import { toast } from 'react-toastify'
 import * as mainApi from "../../../api/main.js"
+import useMain from '../../../hooks/use-main.js'
 
 function BotForm({circleId}) {
   const [input, setInput] = useState({ botName: '' })
   const [error, setError] = useState();
+  const { loading, setLoading } = useMain()
 
   const handleChange = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
@@ -21,6 +23,9 @@ function BotForm({circleId}) {
         return setError(errObj);
       }
       await mainApi.addBot(circleId,input);
+
+      setLoading(!loading)
+
       toast.success("Add new member successfully");
     } catch (error) {
       console.log(error);

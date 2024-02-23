@@ -7,10 +7,13 @@ import { toast } from "react-toastify";
 import validateCreateCircle from "../features/circle/validations/validate-create-circle";
 import CircleContextProvider from "../features/circle/context/CircleContext";
 import CircleList from "../features/circle/components/CircleList";
+import useCircle from "../hooks/use-circle";
+import useAuth from "../hooks/use-auth";
 
 function CirclePage() {
   const [input, setInput] = useState({ circleName: "" });
   const [error, setError] = useState();
+  const { loading, setLoading } = useAuth()
 
   const handleChange = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
@@ -26,6 +29,7 @@ function CirclePage() {
       console.log("create circle: ", input.circleName);
 
       await createCircle(input);
+      setLoading(!loading)
       toast.success("Circle create successfully");
     } catch (err) {
       toast.error(err.response?.data.message);
@@ -39,7 +43,10 @@ function CirclePage() {
               <div className="card-body">
                 <div className="text-2xl font-semibold">My circles</div>
                 <div>which circle are you looking for?</div>
+
+                <div className="overflow-y-scroll h-48">
                 <CircleList />
+                </div>
 
                 {/* create new circle */}
                 <Button

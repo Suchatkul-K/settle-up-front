@@ -7,6 +7,8 @@ import { AddIcon } from "../../../icons";
 import useMain from "../../../hooks/use-main";
 import { toast } from "react-toastify";
 import validateBill from "../validations/validate-bill";
+import useBill from "../../../hooks/use-bill"
+import { getCircleMemberByCircleId } from "../../../api/main";
 
 const splitMethod = {
   FIXED: "FIXED",
@@ -50,11 +52,13 @@ function BillForm() {
   const [error, setError] = useState();
   const [creditorData, setCreditorData] = useState(defaultCreditor);
   const [debtorData, setDebtorData] = useState(defaultDebtor);
-  const [billSummary, setBillSummary] = useState({ ...initial, summary: 0 });
+
   const { circleId, circleMember } = useMain();
+  const { billSummary, setBillSummary, setCreateForm } = useBill()
 
   const handleChange = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
+    // console.log(input)
   };
 
   const handleCreditorData = (e) => {
@@ -76,7 +80,7 @@ function BillForm() {
     } else {
       let member = circleMember.filter((member) => member.id == memberId)[0];
 
-      creditor.push({ id: member.id, name: member.name, amount, member });
+      creditor.push({ id: member.id, name: member.name, amount });
       setInput({ ...input, creditor });
     }
   };
@@ -98,7 +102,6 @@ function BillForm() {
         name: member.name,
         amount,
         splitMethod,
-        member,
       });
       setInput({ ...input, debtor });
     }
@@ -109,11 +112,12 @@ function BillForm() {
     setInput(initial);
     setDebtorData(defaultDebtor);
     setCreditorData(defaultCreditor);
+    setError(null)
     document.getElementById("create_bill_modal").close();
   };
 
   const onSummary = () => {
-    console.log(input);
+    // console.log(input);
     const sumCreditor = input.creditor.reduce(
       (sum, acc) => sum + +acc.amount,
       0
@@ -128,25 +132,41 @@ function BillForm() {
       return acc.splitMethod == splitMethod.SHARE ? sum + +acc.amount : sum;
     }, 0);
 
-    setBillSummary({
-      ...input,
-      summary: sumCreditor - fixedDebtor,
-      sharedDebtor,
-    });
-    console.log(billSummary);
+    const summary = sumCreditor - fixedDebtor;
+    let valuePerShare = 0
+    if(sharedDebtor > 0) {
+      valuePerShare = summary / sharedDebtor
+    }
 
-    const errObj = validateBill(billSummary);
+    if(summary != 0 && sharedDebtor == 0){
+      setError({ balance: "Bill balance not met, please add more creditor or debtor"})
+      return toast.error("Bill balance not met, please add more creditor or debtor")
+    }
+
+    const newSum = {
+      ...input,
+      amount: sumCreditor,
+      summary,
+      sharedDebtor,
+      valuePerShare
+    }
+
+    setBillSummary(newSum);
+    // console.log(newSum);
+
+    const errObj = validateBill(newSum);
     if (errObj) {
       // console.dir(errObj);
       if (billSummary.sharedDebtor > 0) {
         delete errObj.summary;
       }
-      console.log("return", errObj)
+      // console.log("return", errObj)
       return setError(errObj);
     }
 
-    // document.getElementById("bill_summary_modal").showModal()
-    onCancel()
+    setCreateForm(true);
+    document.getElementById("create_bill_modal").close();
+    document.getElementById("bill_summary_modal").showModal()
   };
 
   return (
@@ -158,7 +178,7 @@ function BillForm() {
           placeholder="What have you spent on this time?"
           className="input input-bordered w-full max-w-xs"
           name="title"
-          value={input.title}
+          value={input?.title}
           onChange={handleChange}
         />
         {error?.title && (
@@ -170,12 +190,14 @@ function BillForm() {
         <div className="font-bold">Who paid:</div>
           
           {/* creditor array  */}
-          {input.creditor.map((creditor) => (
+          {input?.creditor.map((creditor) => (
             <CreditorData
               key={creditor.id}
               name={creditor.name}
               amount={creditor.amount}
-              member={creditor.member}
+              setInput={setInput}
+              id={creditor.id}
+              // member={creditor.member}
             />
           ))}
           {/* memberSelection */}
@@ -232,13 +254,14 @@ function BillForm() {
         <div className="form-control w-full gap-1">
           <div className="font-bold">For whom:</div>
           {/* Debtor array  */}
-          {input.debtor.map((debtor) => (
+          {input?.debtor.map((debtor) => (
             <DebtorData
               key={debtor.id}
               name={debtor.name}
               amount={debtor.amount}
               splitMethod={debtor.splitMethod}
-              member={debtor.member}
+              setInput={setInput}
+              id={debtor.id}
             />
           ))}
           {/* memberSelection */}
@@ -311,6 +334,9 @@ function BillForm() {
           {error?.debtor && (
             <span className="flex text-error start-0">{error.debtor}</span>
           )}
+          {error?.balance && (
+            <span className="flex text-error start-0">{error.balance}</span>
+          )}
         </div>
 
         {/* Bill date */}
@@ -320,7 +346,7 @@ function BillForm() {
           <input
             type="date"
             name="billDate"
-            value={input.billDate}
+            value={input?.billDate}
             onChange={handleChange}
           />
         </div>

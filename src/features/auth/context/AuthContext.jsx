@@ -7,6 +7,7 @@ export const AuthContext = createContext()
 
 export default function AuthContextProvider({children}) {
   const [authUser, setAuthUser] = useState(null);
+  const [loading, setLoading] = useState(false)
   const accessToken = getToken()
 
   useEffect(() => {
@@ -22,7 +23,7 @@ export default function AuthContextProvider({children}) {
         })
         // .finally(()=> {console.log(authUser)})
     }
-  }, [accessToken]);
+  }, [accessToken,loading]);
 
   const register = async (user) => {
     const res = await authApi.register(user);
@@ -50,7 +51,7 @@ export default function AuthContextProvider({children}) {
   }
 
   return (
-    <AuthContext.Provider value={{ authUser, setAuthUser, register, login, logout, updateUser }}>
+    <AuthContext.Provider value={{ authUser, setAuthUser, register, login, logout, updateUser, loading, setLoading }}>
         {children}
     </AuthContext.Provider>
   )
