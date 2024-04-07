@@ -1,32 +1,17 @@
 import CircleNav from "../features/main/components/CircleNav.jsx";
 import CircleHeader from "../features/main/components/CircleHeader.jsx";
-import { Outlet, useParams } from "react-router-dom";
-import MainContextProvider from "../features/main/context/MainContext.jsx";
-import { useEffect } from "react";
+import { Outlet } from "react-router-dom";
 import useMain from "../hooks/use-main.js";
-import { getCircleByCircleId } from "../api/main.js";
-import { storeToken } from "../utils/local-storage.js";
 import BillContextProvider from "../features/bill/context/BillContext.jsx";
 
 export default function HomePage() {
-  // const {circleData,setCircleData } = useMain()
-  // const { circleId } = useParams()
+  const { loading } = useMain()
 
-  // console.log(circleId,"AAAAAAAAAAA")
-//   useEffect(()=>{
-//     // if( circleId )
-//     getCircleByCircleId(circleId)
-//         .then(res => {
-//             // console.log(res)
-//             storeToken(res.data.accessToken)
-//             setCircleData(res.data.circleData)
-//             console.log(circleData)
-//         })
-//         .catch(err => console.log(err))
-
-
-
-// },[circleId])
+  if(loading) {
+    return (<div className="hero min-h-screen bg-base-100">
+      <span className="loading loading-spinner loading-lg"></span>
+    </div>)
+  }
   return (
     // <MainContextProvider>
     <BillContextProvider>

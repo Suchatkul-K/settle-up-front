@@ -27,7 +27,7 @@ const initial = {
 export default function BillContextProvider({ children }) {
   const [billSummary, setBillSummary] = useState(initial);
   const [createForm, setCreateForm] = useState(true);
-  const { circleId, setCircleBill, loading, setLoading } = useMain();
+  const { circleId, setCircleBill, reload, setReload } = useMain();
 
   // Bill summary
 
@@ -67,7 +67,7 @@ export default function BillContextProvider({ children }) {
     }
 
     //update bill list
-    setLoading(!loading);
+    setReload(!reload);
 
     setBillSummary(initial);
     setCreateForm(true);
@@ -82,11 +82,28 @@ export default function BillContextProvider({ children }) {
     setBillSummary(initial);
 
     //update bill list
-    setLoading(!loading);
+    setReload(!reload);
 
     document.getElementById("bill_summary_modal").close();
   };
 
+  const switchActivation = async () => {
+    const data = {isActive: !billSummary.isActive}
+    const res = await mainApi.updateBillByBillId(
+      circleId,
+      billSummary.id,
+      data
+    );
+    console.log(res.data);
+
+    //update bill list
+    setReload(!reload);
+
+    setBillSummary(initial);
+    setCreateForm(true);
+    document.getElementById("bill_summary_modal").close();
+  }
+  
   return (
     <BillContext.Provider
       value={{
@@ -96,6 +113,7 @@ export default function BillContextProvider({ children }) {
         setCreateForm,
         createForm,
         deleteBill,
+        switchActivation,
       }}
     >
       {children}

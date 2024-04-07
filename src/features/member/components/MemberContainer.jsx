@@ -2,17 +2,20 @@ import React from "react";
 import Avatar from "../../../components/Avatar";
 import useMain from "../../../hooks/use-main";
 import { toast } from "react-toastify";
-import {
-  deleteMemberByMemberId,
-  getCircleMemberByCircleId,
-} from "../../../api/main.js";
+import { deleteMemberByMemberId } from "../../../api/main.js";
 import EditMemberModal from "./EditMemberModal.jsx";
 import { DeleteIcon } from "../../../icons/index.jsx";
-import * as mainApi from "../../../api/main.js"
 
 function MemberContainer({ name, memberId }) {
-  const { circleId, circleBill, circleMember, setCircleMember, memberExpense, setLoading, loading } =
-    useMain();
+  const {
+    circleId,
+    circleBill,
+    circleMember,
+    setCircleMember,
+    memberExpense,
+    reload,
+    setReload,
+  } = useMain();
   // console.log(circleBill)
   // console.log(circleBill.map(el => el.participant))
   // console.log(circleBill.map(el => el.participant.filter(part => (part.memberId == memberId))))
@@ -23,12 +26,18 @@ function MemberContainer({ name, memberId }) {
 
   const spending = memberExpense[memberId];
 
-  let allBill = (circleBill.reduce((acc,el) => acc.concat(el.participant.filter(part => (part.memberId == memberId))),[]));
+  let allBill = circleBill.reduce(
+    (acc, el) =>
+      acc.concat(el.participant.filter((part) => part.memberId == memberId)),
+    []
+  );
 
   const onDelete = (e) => {
     e.stopPropagation();
     if (allBill[0]) {
       return toast.error("Can not delete member involve in any active bills");
+    } else if (memberId == circleMember.find((el) => el.role == "AUTHOR").id) {
+      return toast.error("Can not delete circle owner member");
     } else {
       //delete member
       deleteMemberByMemberId(circleId, memberId)
@@ -36,7 +45,7 @@ function MemberContainer({ name, memberId }) {
         .catch((err) => console.log(err));
 
       //refresh member
-      setLoading(!loading)
+      setReload(!reload);
 
       toast.success(`Delete member ${name} successfully`);
     }
@@ -44,6 +53,7 @@ function MemberContainer({ name, memberId }) {
 
   const onUpdate = () => {
     console.log("edit member", memberId);
+    // console.log("circleMember",circleMember)
   };
 
   return (

@@ -1,7 +1,7 @@
 import React from 'react'
 
 function Button({children, bgColor, onClick, className, type}) {
-    const finalClass = `btn btn-${bgColor || "primary"} text-xl font-semibold ${className}`
+    const finalClass = `btn btn-${bgColor || "primary"} text-xl font-semibold ${className} border-none`
 
   return (
     <button className={finalClass} onClick={onClick} type={type}>

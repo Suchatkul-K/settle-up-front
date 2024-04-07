@@ -9,7 +9,7 @@ import useMain from '../../../hooks/use-main.js'
 function BotForm({circleId}) {
   const [input, setInput] = useState({ botName: '' })
   const [error, setError] = useState();
-  const { loading, setLoading } = useMain()
+  const { reload, setReload } = useMain()
 
   const handleChange = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
@@ -24,9 +24,10 @@ function BotForm({circleId}) {
       }
       await mainApi.addBot(circleId,input);
 
-      setLoading(!loading)
+      setReload(!reload)
 
       toast.success("Add new member successfully");
+      document.getElementById("add_bot_modal").close()
     } catch (error) {
       console.log(error);
       toast.error(error.response?.data.message)

@@ -6,8 +6,9 @@ import DebtorData from "./DebtorData";
 import Button from "../../../components/Button";
 
 function BillSummaryForm() {
-  const { billSummary, submitBill, createForm, deleteBill } = useBill();
-  //   console.log(billSummary)
+  const { billSummary, submitBill, createForm, deleteBill, switchActivation } = useBill();
+  const {title, creditor, debtor, billDate, isActive} = billSummary
+  // console.log(billSummary)
   // console.log(createForm)
 
   const handleBack = () => {
@@ -22,7 +23,7 @@ function BillSummaryForm() {
         <div className="flex justify-between w-full items-center ">
           Bill title:
           <div className="input input-bordered w-full max-w-xs flex items-center ">
-            {billSummary.title}
+            {title}
           </div>
         </div>
 
@@ -31,7 +32,7 @@ function BillSummaryForm() {
           <div className="font-bold">Who paid:</div>
 
           {/* creditor array  */}
-          {billSummary.creditor.map((creditor) => (
+          {creditor.map((creditor) => (
             <CreditorData
               key={creditor.id}
               name={creditor.name}
@@ -45,7 +46,7 @@ function BillSummaryForm() {
         <div className="form-control w-full gap-1">
           <div className="font-bold">For whom:</div>
           {/* Debtor array  */}
-          {billSummary.debtor.map((debtor) => (
+          {debtor.map((debtor) => (
             <DebtorData
               key={debtor.id}
               name={debtor.name}
@@ -60,10 +61,10 @@ function BillSummaryForm() {
         {/* Bill date */}
         <div className="flex justify-between w-full">
           Bill date
-          <div>{billSummary.billDate}</div>
+          <div>{billDate}</div>
         </div>
 
-        <div className="flex w-full flex-col gap-8"> 
+        <div className="flex w-full flex-col gap-8">
           <div className="flex justify-between w-full">
             <Button type={"button"} className={"w-40"} onClick={submitBill}>
               {createForm ? "Save" : "Edit"}
@@ -78,9 +79,22 @@ function BillSummaryForm() {
             </Button>
           </div>
           {!createForm && (
-            <Button type={"button"} className={"w-full bg-error text-white hover:bg-red-600"} onClick={deleteBill}>
-              Delete
-            </Button>
+            <>
+              <Button
+                type={"button"}
+                className={"w-full bg-error text-white hover:bg-red-600"}
+                onClick={deleteBill}
+              >
+                Delete
+              </Button>
+              <Button
+                type={"button"}
+                className={"w-full bg-success text-white hover:bg-green-700"}
+                onClick={switchActivation}
+              >
+                {isActive ? "Settle This Bill": "Activate This Bill"}
+              </Button>
+            </>
           )}
         </div>
       </div>

@@ -165,7 +165,8 @@ export default function EditBillModal({ bill }) {
       summary,
       sharedDebtor,
       valuePerShare,
-      id: bill.id
+      id: bill.id,
+      isActive: bill.isActive,
     };
 
     setBillSummary(newSum);

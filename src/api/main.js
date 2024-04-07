@@ -1,3 +1,4 @@
+import { date } from "joi"
 import axios from "../config/axios"
 
 export const getCircleByCircleId = (circleId) => axios.get(`/circle/${circleId}`)
@@ -9,3 +10,4 @@ export const getCircleBillByCircleId = (circleId) => axios.get(`/circle/${circle
 export const createBill = (circleId,data) => axios.post(`/circle/${circleId}/bills`, data)
 export const updateBillByBillId = (circleId, billId, data) => axios.patch(`/circle/${circleId}/bills/${billId}`, data)
 export const deleteBillByBillId = (circleId, billId) => axios.delete(`/circle/${circleId}/bills/${billId}`)
+export const switchAllbillsActivation = (circleId, data) => axios.patch(`/circle/${circleId}/bills`, data)

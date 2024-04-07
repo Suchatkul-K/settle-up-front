@@ -1,13 +1,11 @@
 import React from "react";
-import useMain from "../../../hooks/use-main";
 import * as constance from "../../../constance/index.js";
 import Avatar from "../../../components/Avatar.jsx";
-import { DeleteIcon, UpdateIcon } from "../../../icons/index.jsx";
 import EditBillModal from "./EditBillModal.jsx";
 
 function BillContainer({ bill }) {
-
-const { title, billDate, amount, participant, billId } = bill
+// console.log(bill)
+const { title, billDate, amount, participant, billId, isActive } = bill
   // console.log(participant);
   const creditor = participant.filter(
     (el) => el.role == constance.ROLE.CREDITOR
@@ -26,6 +24,8 @@ const { title, billDate, amount, participant, billId } = bill
       {/* <input type="checkbox" /> */}
       <EditBillModal bill={ bill } />
       <div className=" collapse-title flex justify-between rounded-box p-4 hover:shadow-md">
+      {!bill.isActive && <div className="absolute inset-0 bg-gradient-to-r from-slate-100 w-full h-full bg-opacity-25 z-30 rounded-box"></div>}
+        {/* Left Section */}
         <div className="flex flex-col">
           <div className="text-xl font-semibold">{title}</div>
           <div>spent on: {billDate.slice(0, 10)}</div>
@@ -38,6 +38,8 @@ const { title, billDate, amount, participant, billId } = bill
             })}
           </div>
         </div>
+
+        {/* Right Section */}
         <div className="flex flex-col items-end">
           <div>{amount} THB</div>
           <div className="avatar-group -space-x-4 rtl:space-x-reverse">
